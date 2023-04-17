@@ -34,7 +34,7 @@ function transform(arr) {
     } else if (arr[i] === "--double-prev" && arr[i - 2] === "--discard-next") {
       continue;
     } else if (arr[i] === "--double-prev") {
-      if (i - 1 >= 0 && arr[i - 2] !== "--discard-next") {
+      if (i - 1 >= 0) {
           convertedArr.push(arr[i - 1]);
         }
     } else {
