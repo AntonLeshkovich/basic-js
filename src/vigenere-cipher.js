@@ -20,13 +20,76 @@ const { NotImplementedError } = require('../extensions/index.js');
  * 
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  constructor(direct = true) {
+    this.direct = direct;
   }
-  decrypt() {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+
+  encrypt(str, key) {
+    if (!str || !key) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    const arr_EN = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+    let strUp = str.toUpperCase();
+    let keyUp = key.toUpperCase();
+    let message = "";
+    let currIndKey = 0;
+
+    for (let i = 0; i < strUp.length; i++) {
+      if (arr_EN.includes(strUp[i])) {
+        let keySymbol = keyUp[currIndKey % keyUp.length];
+        let keyIndex = arr_EN.indexOf(keySymbol);
+        let strIndex = arr_EN.indexOf(strUp[i]);
+        let encryptedIndex = (strIndex + keyIndex) % arr_EN.length;
+        let encryptedSymbol = arr_EN[encryptedIndex];
+        message += encryptedSymbol;
+        currIndKey += 1;
+      } else {
+        message += strUp[i];
+      }
+    }
+
+    if (this.direct) {
+      return message;
+    } else {
+      return message.split('').reverse().join('');
+    }
+
+  }
+
+  decrypt(encryptStr, key) {
+    if (!encryptStr || !key) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    const arr_EN = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+    let encryptStrUp = encryptStr.toUpperCase();
+    let keyUp = key.toUpperCase();
+    let message = "";
+    let currIndKey = 0;
+
+    for (let i = 0; i < encryptStrUp.length; i++) {
+      if (arr_EN.includes(encryptStrUp[i])) {
+        const keySymbol = keyUp[currIndKey % keyUp.length];
+        const keyIndex = arr_EN.indexOf(keySymbol);
+        const encryptIndex = arr_EN.indexOf(encryptStrUp[i]);
+        let messageIndex = (encryptIndex - keyIndex + arr_EN.length) % arr_EN.length;
+        let messageSymbol = arr_EN[messageIndex];
+        message += messageSymbol;
+        currIndKey += 1;
+      } else {
+        message += encryptStrUp[i];
+      }
+    }
+
+    if (this.direct) {
+      return message;
+    } else {
+      return message.split('').reverse().join('');
+    }
+
   }
 }
 
